@@ -19,6 +19,7 @@ var app = {
 		contentType: 'application/json',
 		success: function (data) {
 		console.log('chatterbox: Message sent');
+    app.init()
 		},
 		error: function (data) {
 		// See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -34,6 +35,7 @@ var app = {
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
+        console.log(app.server)
         data = data.results;
         for (var key in data) {
         app.renderMessage(data[key])
@@ -114,7 +116,10 @@ $(document).ready(function() {
   // Switch rooms and fetch messages for the room
   $("#roomSelect").change(function() {
     var currentRoom = ($('#roomSelect option:selected').text())
-    
+    app.server = "http://parse.sfm8.hackreactor.com/chatterbox/classes/" + $('#roomSelect option:selected').text()
+    console.log(app.server)
+    app.init()
+
   })
     // Need to init on the room
     // Set the room somehow
