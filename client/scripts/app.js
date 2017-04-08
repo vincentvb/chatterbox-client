@@ -1,8 +1,9 @@
 var app = {
-  server: "http://parse.sfm8.hackreactor.com/chatterbox/classes/message",
+  server: "http://parse.sfm8.hackreactor.com/chatterbox/classes/lobby",
   // room: 'lobby',
 
 	init: function() {
+    app.clearMessages()
     app.fetch()
     // Fetch messages from the default server
     // Iterate through message objects
@@ -55,7 +56,7 @@ var app = {
   renderMessage: function(message) {
     // Get the #chats element
     // Create a new element and prepend to #chats
-    let $paragraph = ('<p class="username">' + message.username + message.text + '</p>');
+    let $paragraph = ('<div class="chat"><div class="username">' + message.username + '</div> <div>' + message.text + '</div></div>');
     $('#chats').prepend($paragraph);
 
 
@@ -68,7 +69,9 @@ var app = {
     // create a new room
   },
 
-  handleUsernameClick: function() {
+  handleUsernameClick: function(userNameText) {
+    $( '.username:contains(' + userNameText + ')' ).addClass('friend')
+    // $('.chat username[value=' + userNameText + ']').addClass('friend');
     console.log("CLICKED")
   },
 
@@ -88,14 +91,16 @@ $(document).ready(function() {
 
   // Click on a username to add a friend; friends should be bolded in messages
   $('#chats').on('click', '.username', function(event) {
-    app.handleUsernameClick();
+    $test = $(event.currentTarget);
+    var userNameText = ($test.text());
+    app.handleUsernameClick(userNameText);
     // Create a new room with renderRoom
     // Switch to renderRoom
     // Fetch to get messages from the room
   });
 
   // Send messages to the server
-  $('#send').on('click', '.submit', function(event) {
+  $('#send .submit').on('click', function(event) {
     event.preventDefault();
     //app.handleSubmit();
     var text = ($( "input:first" ).val());
@@ -103,9 +108,19 @@ $(document).ready(function() {
     var currentRoom = $('#roomSelect option:selected').text()
     app.handleSubmit(username, text, currentRoom)
     // need to get the room
-
-
   });
+  $('#create-room .submit').on('click', function(event) {
+    event.preventDefault();
+    var text = ($( "#create-room input:first" ).val());
+    console.log(text);
+    var appendElement = '<option value=' + text + '>' + text + '</option> ';
+
+    $('#roomSelect').append(appendElement);
+    // app.handleSubmit(username, text, currentRoom)
+    // need to get the room
+  });
+
+
 
   // Create a new room when new room dropdown is selected
     // Listen for when a user selects to make a new room
@@ -115,6 +130,12 @@ $(document).ready(function() {
 
   // Switch rooms and fetch messages for the room
   $("#roomSelect").change(function() {
+    // if create a new room is selected
+      // prompt user for room name
+      // add the new room to the drop down
+
+
+
     var currentRoom = ($('#roomSelect option:selected').text())
     app.server = "http://parse.sfm8.hackreactor.com/chatterbox/classes/" + $('#roomSelect option:selected').text()
     console.log(app.server)
