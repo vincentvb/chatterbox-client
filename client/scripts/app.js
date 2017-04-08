@@ -3,8 +3,9 @@ var app = {
   // room: 'lobby',
 
 	init: function() {
-    app.clearMessages()
-    app.fetch()
+    app.clearMessages();
+    app.fetch();
+
     // Fetch messages from the default server
     // Iterate through message objects
       // Render messages
@@ -36,7 +37,6 @@ var app = {
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
-        console.log(app.server)
         data = data.results;
         for (var key in data) {
         app.renderMessage(data[key])
@@ -112,7 +112,6 @@ $(document).ready(function() {
   $('#create-room .submit').on('click', function(event) {
     event.preventDefault();
     var text = ($( "#create-room input:first" ).val());
-    console.log(text);
     var appendElement = '<option value=' + text + '>' + text + '</option> ';
 
     $('#roomSelect').append(appendElement);
@@ -138,7 +137,6 @@ $(document).ready(function() {
 
     var currentRoom = ($('#roomSelect option:selected').text())
     app.server = "http://parse.sfm8.hackreactor.com/chatterbox/classes/" + $('#roomSelect option:selected').text()
-    console.log(app.server)
     app.init()
 
   })
@@ -147,6 +145,10 @@ $(document).ready(function() {
 });
 
 app.init()
+
+setInterval(function() {
+  app.init()
+}, 5000)
 // send messages and fetch as soon as it's sent
 // Add click handler on submit
   // Grab the text in the input box and set to message
